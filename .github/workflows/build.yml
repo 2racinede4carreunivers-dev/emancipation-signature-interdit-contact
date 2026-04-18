@@ -25,11 +25,23 @@ jobs:
       - name: Compile liste.tex
         run: |
           mkdir -p build
-          pdflatex -interaction=nonstopmode -output-directory=build liste.tex
-          pdflatex -interaction=nonstopmode -output-directory=build liste.tex
+          pdflatex -interaction=nonstopmode -output-directory=build tex/liste.tex
+          pdflatex -interaction=nonstopmode -output-directory=build tex/liste.tex
+
+      - name: Generate SHA-256 attestation
+        run: |
+          cd build
+          sha256sum liste.pdf > liste_sha256.txt
+          cat liste_sha256.txt
 
       - name: Upload PDF
         uses: actions/upload-artifact@v4
         with:
           name: liste-pdf
           path: build/liste.pdf
+
+      - name: Upload SHA-256 attestation
+        uses: actions/upload-artifact@v4
+        with:
+          name: liste-sha256
+          path: build/liste_sha256.txt
